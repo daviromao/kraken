@@ -1,5 +1,4 @@
 import { Client } from 'discord.js';
-import config from '../config';
 import * as commandModules from './commands';
 
 const commands = Object(commandModules);
@@ -28,5 +27,3 @@ client.on('interactionCreate', async (interaction) => {
   const { commandName } = interaction;
   commands[commandName].execute(interaction, client);
 });
-
-client.login(config.DISCORD_TOKEN);
