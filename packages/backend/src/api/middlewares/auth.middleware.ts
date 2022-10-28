@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import prisma from '../../services/prisma';
+import { decrypt } from '../utils/encrypt';
 
 export interface CustomRequest extends Request {
   token: string | JwtPayload;
@@ -24,7 +25,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     if (!discordUser) throw new Error('User not found');
-
+    discordUser.accessToken = decrypt(discordUser.accessToken);
     res.locals.discordUser = discordUser;
 
     next();
