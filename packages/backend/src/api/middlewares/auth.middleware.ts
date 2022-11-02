@@ -20,12 +20,12 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const discordUser = await prisma.discordUser.findUniqueOrThrow({
       where: {
-        discordId: decoded.discordId,
+        id: decoded.id,
       },
     });
 
     if (!discordUser) throw new Error('User not found');
-    discordUser.accessToken = decrypt(discordUser.accessToken);
+    discordUser.accessToken = decrypt(discordUser.accessToken ?? '');
     res.locals.discordUser = discordUser;
 
     next();

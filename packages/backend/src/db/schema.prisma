@@ -11,12 +11,30 @@ datasource db {
 }
 
 model DiscordUser {
-  id            String   @id @default(cuid())
-  discordId     String   @unique
-  username      String
-  discriminator String
-  avatar        String?
-  accessToken   String
+  id              String   @id @unique
+  username        String
+  discriminator   String
+  avatar          String?
+  accessToken     String?
+  giveawayEntries Giveaway[] @relation("GiveawayEntries")
+  giveawayWinners Giveaway[] @relation("GiveawayWinners")
 
   @@map("discordUsers")
+}
+
+model Giveaway {
+  id            String   @id @default(cuid())
+  prize         String
+  createdAt     DateTime @default(now())
+  duration      Int
+  winnersCount  Int
+  endsAt        DateTime?
+  ended         Boolean  @default(false)
+  guildId       String
+  channelId     String
+  messageId     String?
+  entries       DiscordUser[] @relation("GiveawayEntries")
+  winners       DiscordUser[] @relation("GiveawayWinners")
+
+  @@map("giveaways")
 }
